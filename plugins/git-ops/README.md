@@ -54,7 +54,7 @@ re-learn them. Switch the `memory:` flag to `local` (per-repo, gitignored) or `u
 
 ```
 /plugin marketplace add hjc/agents
-/plugin install git-ops@agents
+/plugin install git-ops@hjc-agents
 ```
 
 Once installed, Claude Code dispatches to it automatically when you ask to commit, branch, push,

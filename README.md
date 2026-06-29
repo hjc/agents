@@ -17,8 +17,8 @@ From inside Claude Code, add this marketplace once, then install whichever plugi
 
 ```
 /plugin marketplace add hjc/agents
-/plugin install git-ops@agents
-/plugin install tdd-executor@agents
+/plugin install git-ops@hjc-agents
+/plugin install tdd-executor@hjc-agents
 ```
 
 Run `/plugin marketplace update` to pull new versions when they ship, and manage installed plugins

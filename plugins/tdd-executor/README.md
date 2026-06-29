@@ -55,7 +55,7 @@ in-progress state. Switch the `memory:` flag to `local` (per-repo, gitignored) o
 
 ```
 /plugin marketplace add hjc/agents
-/plugin install tdd-executor@agents
+/plugin install tdd-executor@hjc-agents
 ```
 
 Once installed, dispatch to it after a plan is reviewed and approved — e.g. "the plan looks good,

@@ -1,0 +1,9 @@
+{
+  "name": "tdd-executor",
+  "description": "A subagent that executes an approved implementation plan in strict test-driven (red-green-refactor) style.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Hayden Chudy"
+  },
+  "license": "LGPL-3.0-or-later"
+}

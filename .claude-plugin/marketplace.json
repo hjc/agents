@@ -1,0 +1,22 @@
+{
+  "name": "agents",
+  "owner": {
+    "name": "Hayden Chudy"
+  },
+  "metadata": {
+    "description": "Dedicated software-development subagents for Claude Code.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "git-ops",
+      "source": "./plugins/git-ops",
+      "description": "A disciplined git and source-control subagent: surgical staging, conventional commits, verified status reports, and guardrails against destructive operations."
+    },
+    {
+      "name": "tdd-executor",
+      "source": "./plugins/tdd-executor",
+      "description": "A subagent that executes an approved implementation plan in strict test-driven (red-green-refactor) style."
+    }
+  ]
+}

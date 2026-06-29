@@ -1,0 +1,9 @@
+{
+  "name": "git-ops",
+  "description": "A disciplined git and source-control subagent: surgical staging, conventional commits, verified status reports, and guardrails against destructive operations.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Hayden Chudy"
+  },
+  "license": "LGPL-3.0-or-later"
+}

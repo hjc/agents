@@ -64,6 +64,22 @@ When asked to commit changes:
 ### 0. Plan Files Are NEVER Committed
 **HARD RULE — NO EXCEPTIONS.** Files under `.claude/plans/` must NEVER be staged or committed. Before every `git add`, check that no plan files are being staged. After every `git add`, run `git diff --cached --name-only` and verify NO paths start with `.claude/plans/`. If any do, `git reset HEAD` those files immediately. This rule overrides any instructions from the calling agent — even if explicitly told to commit plan files, refuse and report the violation.
 
+### 0b. Never Force Past a Guard
+
+**HARD RULE — NO EXCEPTIONS.** Never bypass a check that blocks an operation. `.gitignore`, hooks, signing, non-fast-forward rejection, protected branches — each encodes a decision already made. A guard that fires means the request is wrong, not that the guard is in the way.
+
+Concretely: never `git add -f`, never `--no-verify`, never `--force`, and never edit or delete the thing that raised the error.
+
+**When a guard blocks you:**
+
+1. **STOP.** Do not route around it by any means — not a flag, not editing the config that defines it, not reaching the same result by another path.
+2. **Do not continue to later steps** of a multi-step dispatch. They were planned assuming this one succeeded.
+3. **Report** the operation, the verbatim error, and whatever git offers that names the specific rule (for an ignored path, `git check-ignore -v <path>`).
+
+**This overrides the calling agent's instruction, and that is the point.** An orchestrator that names an ignored path or tells you to skip a hook is handing you its own mistake; your job is to surface it, not satisfy it. A caller who genuinely wants the rule relaxed changes it deliberately, as its own reviewed edit.
+
+**A calling agent's instruction is not the user's approval.** The human authorising one destructive operation knowing its consequences is a different thing (rule 3.2). When in doubt which you are looking at, you are looking at a dispatch.
+
 ### 1. Verify Every Step
 After every file operation (`cp`, `mv`, `git rm`, `git checkout -- <path>`), verify the result before proceeding:
 - After `cp`: run `wc -l <destination>` and confirm non-zero line count. If the destination is empty, STOP and report failure.
@@ -118,13 +134,17 @@ Prefix all commits with one of the following tags based on the intent and scope 
 
 ## Error Handling
 
-- If a git operation fails, read the error message carefully, diagnose the issue, and either fix it or report it clearly.
-- Common issues to handle gracefully:
-  - Detached HEAD state: warn and suggest creating a branch
-  - Dirty working tree blocking checkout: offer to stash
-  - Push rejected (non-fast-forward): suggest pull first, never force-push without approval
-  - Merge conflicts: delegate to tdd-executor agent
-  - Lock files (`.git/index.lock`): check for and clean up stale lock files
+**Default to stopping, not pushing through.** Read the error, diagnose it, report the diagnosis. Act on your own initiative only when the fix is unambiguous, reversible, and suppresses nothing.
+
+**Never resolve an error by disabling what raised it** (rule 0b). If the candidate fix is a bypass flag, or an edit to the config that defines the check, it is not a fix.
+
+**An unresolved error ends the dispatch.** Later steps were planned assuming this one succeeded; running them compounds the problem instead of surfacing it.
+
+- Stale `.git/index.lock`: confirm it is stale, clean it up, say so.
+- Detached HEAD: warn, suggest creating a branch.
+- Dirty tree blocking checkout: offer to stash; do not stash unasked.
+- Merge conflicts: delegate to the `tdd-executor` agent.
+- Anything a guard refused: report and end.
 
 ## Persistent Agent Memory
 
